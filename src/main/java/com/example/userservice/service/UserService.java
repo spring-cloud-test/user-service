@@ -1,8 +1,12 @@
 package com.example.userservice.service;
 
 import com.example.userservice.domain.UserDto;
-import org.springframework.stereotype.Service;
+import com.example.userservice.domain.UserEntity;
 
 public interface UserService {
     UserDto createUser(UserDto userDto);
+
+    UserDto getUserByUserId(String userId);
+
+    Iterable<UserEntity> getUserByAll();
 }
