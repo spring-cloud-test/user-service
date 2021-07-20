@@ -41,6 +41,3 @@ logging:
     com:
       example:
         userservice: debug
-#    org:
-#      springframework:
-#        security: debug
