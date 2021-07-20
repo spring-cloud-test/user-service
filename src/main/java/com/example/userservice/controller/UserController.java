@@ -1,10 +1,10 @@
 package com.example.userservice.controller;
 
 import com.example.userservice.component.Greeting;
-import com.example.userservice.domain.RequestUser;
-import com.example.userservice.domain.ResponseUser;
 import com.example.userservice.domain.UserDto;
 import com.example.userservice.domain.UserEntity;
+import com.example.userservice.dto.RequestUser;
+import com.example.userservice.dto.ResponseUser;
 import com.example.userservice.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -15,13 +15,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.Path;
 import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/user-service")
+@RequestMapping("/")
 public class UserController {
 
     private final Environment environment;
@@ -70,7 +69,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @GetMapping(value = "/users/{userId]")
+    @GetMapping(value = "/users/{userId}")
     public ResponseEntity<ResponseUser> getUser(@PathVariable("userId") String userId) {
         UserDto userDto = userService.getUserByUserId(userId);
         ResponseUser responseUser = new ModelMapper().map(userDto, ResponseUser.class);

@@ -1,4 +1,4 @@
-package com.example.userservice.domain;
+package com.example.userservice.dto;
 
 import lombok.Data;
 
@@ -15,7 +15,7 @@ public class RequestUser {
 
     @NotNull(message = "Password cannot be null")
     @Size(min = 8, message = "Password must be equal or greater than 8 characters and less than 16 characters")
-    private String pwd;
+    private String password;
 
     @NotNull(message = "Name cannot be null")
     @Size(min = 2, message = "Name not be less than two characters")

@@ -9,7 +9,6 @@ import javax.persistence.*;
 @Table(name = "users")
 public class UserEntity {
     @Id
-    @Column(name = "id", nullable = false)
     @GeneratedValue
     private Long id;
 

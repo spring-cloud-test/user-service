@@ -1,4 +1,4 @@
-package com.example.userservice.domain;
+package com.example.userservice.dto;
 
 import lombok.Data;
 
