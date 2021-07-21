@@ -30,7 +30,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     private final UserService userService;
     private final Environment env;
 
-    @Autowired
     public CustomAuthenticationFilter(AuthenticationManager authenticationManager, UserService userService, Environment env) {
         super(authenticationManager);
         this.userService = userService;
