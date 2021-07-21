@@ -5,6 +5,7 @@ import com.example.userservice.domain.UserEntity;
 import com.example.userservice.dto.ResponseOrder;
 import com.example.userservice.exception.UserNameNotFoundException;
 import com.example.userservice.repository.UserRepository;
+import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +65,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public Iterable<UserEntity> getUserByAll() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public UserDto getUserDetailsByEmail(String username) {
+        UserEntity userEntity = userRepository.findByEmail(username);
+
+        if(userEntity == null) {
+            throw new UserNameNotFoundException();
+        }
+        ModelMapper mapper = new ModelMapper();
+        UserDto userDto = mapper.map(userEntity, UserDto.class);
+
+        return userDto;
     }
 
     @Override

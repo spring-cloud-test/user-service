@@ -38,6 +38,8 @@ greeting:
 
 logging:
   level:
-    com:
-      example:
-        userservice: debug
+    com.example.userservice: debug
+
+token:
+  expiration_time: 86_400_000
+  secret: user_token

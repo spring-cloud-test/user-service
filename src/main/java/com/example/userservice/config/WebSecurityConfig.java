@@ -26,19 +26,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         this.env = env;
     }
 
-    /**
-     * 인증 관련
-     *
-     * @param auth
-     * @throws Exception
-     */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder);
     }
 
     /**
-     * 권한 관련
+     * 인증 관련
      *
      * @param http
      * @throws Exception
@@ -50,7 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/**")
                 // 인증에 대한 요청을 하는 IP에 대해 권한 필터 추가
-                .hasIpAddress("172.16.100.191")
+                .hasIpAddress("172.16.100.156")
                 .and()
                 .addFilter(getAuthenticationFilter());
 
@@ -58,9 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     private CustomAuthenticationFilter getAuthenticationFilter() throws Exception {
-        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter();
-        customAuthenticationFilter.setAuthenticationManager(authenticationManager());
-        return customAuthenticationFilter;
+        return new CustomAuthenticationFilter(authenticationManager(), userService, env);
     }
 
 }
