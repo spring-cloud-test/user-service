@@ -11,11 +11,18 @@ spring:
       settings:
         web-allow-others: true
       path: /h2-console
+  # datasource 설정 정보
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:testdb
     username: sa
     password:
+  # Messaging Service 설정 정보
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
 
 # eureka 서버에 등록할 수 있도록 설정
 eureka:
@@ -44,4 +51,4 @@ management:
   endpoints:
     web:
       exposure:
-        include: refresh, health, beans
+        include: refresh, health, beans, busrefresh
