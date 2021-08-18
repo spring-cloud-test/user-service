@@ -1,0 +1,47 @@
+### User
+POST http://172.16.100.248:60293/users
+Content-Type: application/json
+
+{
+  "email" : "seok@gmail.com",
+  "password" : "1234",
+  "name" : "seok"
+}
+
+### User
+POST http://172.16.100.248:60293/login
+Content-Type: application/json
+
+{
+  "email" : "seok@gmail.com",
+  "password" : "1234"
+}
+
+
+
+### Users 등록
+POST http://localhost:8000/user-service/users
+Content-Type: application/json
+
+{
+  "email" : "seok@gmail.com",
+  "password" : "1234",
+  "name" : "seok"
+}
+
+### User Login
+POST http://localhost:8000/user-service/login
+Content-Type: application/json
+
+{
+  "email" : "seok@gmail.com",
+  "password" : "1234"
+}
+
+
+### GET USER
+GET http://localhost:8000/user-service/users/b6eef399-6afe-4cb2-80dc-65f285a1d664
+
+### USER Orders
+GET http://localhost:8000/user-service/users/4fd351ed-f66f-4121-966e-708038926ebd
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0ZmQzNTFlZC1mNjZmLTQxMjEtOTY2ZS03MDgwMzg5MjZlYmQiLCJleHAiOjE2MjkzNjg2NzV9.L5dSKG3uOI_3tp8W6lLLkn0irL1tOnNKlwWwU7ejLw4h22oUWpe51AJr_ZC2Asdm06bGTrP4U-oy32SaEPHnAA

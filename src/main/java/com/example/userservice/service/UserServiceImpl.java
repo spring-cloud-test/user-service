@@ -5,28 +5,37 @@ import com.example.userservice.domain.UserEntity;
 import com.example.userservice.dto.ResponseOrder;
 import com.example.userservice.exception.UserNameNotFoundException;
 import com.example.userservice.repository.UserRepository;
-import javassist.NotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
+    private final RestTemplate restTemplate;
+    private final Environment environment;
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserServiceImpl(RestTemplate restTemplate, Environment environment, UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+        this.restTemplate = restTemplate;
+        this.environment = environment;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -56,9 +65,15 @@ public class UserServiceImpl implements UserService {
 
         UserDto userDto = new ModelMapper().map(userEntity, UserDto.class);
 
-        List<ResponseOrder> orders = new ArrayList<>();
-        userDto.setOrders(orders);
+        log.info("프로퍼티 확인 : {}", environment.getProperty("order-service.url"));
+        String orderUrl = String.format(Objects.requireNonNull(environment.getProperty("order-service.url")), userId);
+        ResponseEntity<List<ResponseOrder>> orderListResponse =
+                restTemplate.exchange(orderUrl, HttpMethod.GET, null, new ParameterizedTypeReference<>() {});
 
+        List<ResponseOrder> orders = orderListResponse.getBody();
+        log.info("주문 정보 확인 : {}", orders);
+        userDto.setOrders(orders);
+        log.info("주문 정보 등록 확인 : {}", userDto);
         return userDto;
     }
 
@@ -75,9 +90,8 @@ public class UserServiceImpl implements UserService {
             throw new UserNameNotFoundException();
         }
         ModelMapper mapper = new ModelMapper();
-        UserDto userDto = mapper.map(userEntity, UserDto.class);
 
-        return userDto;
+        return mapper.map(userEntity, UserDto.class);
     }
 
     @Override

@@ -9,7 +9,6 @@ import com.example.userservice.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +26,7 @@ public class UserController {
     private final Greeting greeting;
     private final UserService userService;
 
-    @Autowired
+
     public UserController(Environment environment, Greeting greeting, UserService userService) {
         this.environment = environment;
         this.greeting = greeting;
@@ -78,6 +77,7 @@ public class UserController {
         UserDto userDto = userService.getUserByUserId(userId);
         ResponseUser responseUser = new ModelMapper().map(userDto, ResponseUser.class);
 
+        log.info("응답 객체 : {}", responseUser);
         return ResponseEntity.status(HttpStatus.OK).body(responseUser);
     }
 }

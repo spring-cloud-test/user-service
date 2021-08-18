@@ -31,7 +31,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     private final Environment env;
 
     public CustomAuthenticationFilter(AuthenticationManager authenticationManager, UserService userService, Environment env) {
-        super(authenticationManager);
+        super.setAuthenticationManager(authenticationManager);
         this.userService = userService;
         this.env = env;
     }
