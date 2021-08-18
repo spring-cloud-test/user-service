@@ -5,22 +5,11 @@ server:
 spring:
   application:
     name: user-service
-  h2:
-    console:
-      enabled: true
-      settings:
-        web-allow-others: true
-      path: /h2-console
-  # datasource 설정 정보
-  datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:testdb
-    username: sa
-    password:
+  # datasource 설정 정보 공통 프로파일로 위치 변경
   # Messaging Service 설정 정보
   rabbitmq:
     host: 127.0.0.1
-    port: 5672
+    port: 5673
     username: guest
     password: guest
 
@@ -38,7 +27,6 @@ eureka:
     service-url:
       # 서버가 가진 위치값을 설정
       defaultZone: http://127.0.0.1:8761/eureka
-
 
 greeting:
   message: Welcome to the Simple E-Commerce

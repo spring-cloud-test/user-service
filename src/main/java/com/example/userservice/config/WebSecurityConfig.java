@@ -46,7 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // 인증에 대한 요청을 하는 IP에 대해 권한 필터 추가
         http.authorizeRequests()
-                .antMatchers("/**").hasIpAddress("172.16.101.127")
+                .antMatchers("/**").hasIpAddress("172.16.100.248")
                 .and()
                 .addFilter(getAuthenticationFilter());
 

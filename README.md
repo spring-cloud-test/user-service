@@ -21,3 +21,7 @@
 ## 사용자 조회
 
 ## 사용자 로그인
+
+## JWT 참고
+
+- [JWT를 소개합니다.](https://meetup.toast.com/posts/239)
