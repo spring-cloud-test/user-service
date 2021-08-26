@@ -1,5 +1,6 @@
 package com.example.userservice.service;
 
+import com.example.userservice.client.OrderServiceClient;
 import com.example.userservice.domain.UserDto;
 import com.example.userservice.domain.UserEntity;
 import com.example.userservice.dto.ResponseOrder;
@@ -8,10 +9,7 @@ import com.example.userservice.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,7 +19,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Slf4j
@@ -32,12 +29,14 @@ public class UserServiceImpl implements UserService {
     private final Environment environment;
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final OrderServiceClient orderServiceClient;
 
-    public UserServiceImpl(RestTemplate restTemplate, Environment environment, UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserServiceImpl(RestTemplate restTemplate, Environment environment, UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, OrderServiceClient orderServiceClient) {
         this.restTemplate = restTemplate;
         this.environment = environment;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.orderServiceClient = orderServiceClient;
     }
 
     @Override
@@ -66,13 +65,17 @@ public class UserServiceImpl implements UserService {
         UserDto userDto = new ModelMapper().map(userEntity, UserDto.class);
 
         log.info("프로퍼티 확인 : {}", environment.getProperty("order-service.url"));
-        String orderUrl = String.format(Objects.requireNonNull(environment.getProperty("order-service.url")), userId);
-        ResponseEntity<List<ResponseOrder>> orderListResponse =
-                restTemplate.exchange(orderUrl, HttpMethod.GET, null, new ParameterizedTypeReference<>() {});
+//        String orderUrl = String.format(Objects.requireNonNull(environment.getProperty("order-service.url")), userId);
+//        ResponseEntity<List<ResponseOrder>> orderListResponse =
+//                restTemplate.exchange(orderUrl, HttpMethod.GET, null, new ParameterizedTypeReference<>() {});
+//
+//        List<ResponseOrder> orders = orderListResponse.getBody();
+//        log.info("주문 정보 확인 : {}", orders);
 
-        List<ResponseOrder> orders = orderListResponse.getBody();
-        log.info("주문 정보 확인 : {}", orders);
+        // feignClient
+        List<ResponseOrder> orders = orderServiceClient.getOrders(userId);
         userDto.setOrders(orders);
+
         log.info("주문 정보 등록 확인 : {}", userDto);
         return userDto;
     }
@@ -86,7 +89,7 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserDetailsByEmail(String username) {
         UserEntity userEntity = userRepository.findByEmail(username);
 
-        if(userEntity == null) {
+        if (userEntity == null) {
             throw new UserNameNotFoundException();
         }
         ModelMapper mapper = new ModelMapper();

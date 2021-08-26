@@ -2,7 +2,6 @@ package com.example.userservice.config;
 
 import com.example.userservice.security.CustomAuthenticationFilter;
 import com.example.userservice.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
