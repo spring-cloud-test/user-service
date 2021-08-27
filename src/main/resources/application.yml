@@ -33,7 +33,10 @@ greeting:
 
 logging:
   level:
-    com.example.userservice: debug
+    com:
+      example:
+        userservice:
+          clinet: debug
 
 management:
   endpoints:

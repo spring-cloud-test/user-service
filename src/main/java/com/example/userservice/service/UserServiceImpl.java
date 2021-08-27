@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,14 +24,12 @@ import java.util.UUID;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final RestTemplate restTemplate;
     private final Environment environment;
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final OrderServiceClient orderServiceClient;
 
-    public UserServiceImpl(RestTemplate restTemplate, Environment environment, UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, OrderServiceClient orderServiceClient) {
-        this.restTemplate = restTemplate;
+    public UserServiceImpl(Environment environment, UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, OrderServiceClient orderServiceClient) {
         this.environment = environment;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -64,16 +61,7 @@ public class UserServiceImpl implements UserService {
 
         UserDto userDto = new ModelMapper().map(userEntity, UserDto.class);
 
-        log.info("프로퍼티 확인 : {}", environment.getProperty("order-service.url"));
-//        String orderUrl = String.format(Objects.requireNonNull(environment.getProperty("order-service.url")), userId);
-//        ResponseEntity<List<ResponseOrder>> orderListResponse =
-//                restTemplate.exchange(orderUrl, HttpMethod.GET, null, new ParameterizedTypeReference<>() {});
-//
-//        List<ResponseOrder> orders = orderListResponse.getBody();
-//        log.info("주문 정보 확인 : {}", orders);
-
-        // feignClient
-        List<ResponseOrder> orders = orderServiceClient.getOrders(userId);
+        List<ResponseOrder> orders = orderServiceClient.getOrders(userId); // feignClient
         userDto.setOrders(orders);
 
         log.info("주문 정보 등록 확인 : {}", userDto);
